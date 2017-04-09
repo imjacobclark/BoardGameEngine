@@ -42,7 +42,6 @@ public class GamesControllerTest {
     }
 
     @Test
-    @Ignore
     public void successfulMoveCallToWebsocketEndpointReturnsAllCurrentPiecesOnBoard() throws Exception {
         StompSession session = stompClient
                 .connect(WEBSOCKET_URI, new StompSessionHandlerAdapter() {
@@ -54,7 +53,10 @@ public class GamesControllerTest {
         session.send(WEBSOCKET_DESTINATION_ENDPOINT, "{\"player\": \"BLACK\", \"column\": 0, \"row\": 0}".getBytes());
         session.send(WEBSOCKET_DESTINATION_ENDPOINT, "{\"player\": \"WHITE\", \"column\": 0, \"row\": 1}".getBytes());
 
-        Assert.assertEquals("[{\"player\":\"WHITE\",\"column\":0,\"row\":1},{\"player\":\"BLACK\",\"column\":0,\"row\":0}]", blockingQueue.poll(1, SECONDS));
+        String message = blockingQueue.poll(1, SECONDS);
+
+        Assert.assertTrue(message.contains("{\"player\":\"WHITE\",\"column\":0,\"row\":1}"));
+        Assert.assertTrue(message.contains("{\"player\":\"BLACK\",\"column\":0,\"row\":0}"));
     }
 
     class MockStompFrameHandler implements StompFrameHandler {
