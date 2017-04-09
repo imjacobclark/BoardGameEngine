@@ -1,9 +1,12 @@
 package xyz.jacobclark.models;
 
 public class Move {
-    private final Player player;
-    private final int column;
-    private final int row;
+    private Player player = null;
+    private int column = -1;
+    private int row = -1;
+
+    public Move() {
+    }
 
     public Move(Player player, int column, int row) {
         this.player = player;

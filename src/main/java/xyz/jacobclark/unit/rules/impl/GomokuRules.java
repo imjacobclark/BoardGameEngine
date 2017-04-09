@@ -1,16 +1,19 @@
-package xyz.jacobclark.rules.impl;
+package xyz.jacobclark.unit.rules.impl;
 
 import xyz.jacobclark.exceptions.PositionOutOfBoundsException;
 import xyz.jacobclark.models.Move;
 import xyz.jacobclark.exceptions.PositionOccupiedException;
 import xyz.jacobclark.models.Piece;
-import xyz.jacobclark.models.Player;
-import xyz.jacobclark.rules.Rules;
+import xyz.jacobclark.unit.rules.Rules;
+import xyz.jacobclark.unit.validators.HorizontalValidator;
 
 import java.util.List;
 import java.util.function.Predicate;
 
 public class GomokuRules implements Rules {
+
+    public static final int WINNING_CONSECUTIVE_NUMBER = 5;
+
     @Override
     public boolean validateThatMoveIsLegal(List<Piece> pieces, Move move) throws PositionOccupiedException, PositionOutOfBoundsException {
         if (pieces.stream().anyMatch(twoPiecesAtSameXYIntersectionOnBoard(move)))
@@ -28,42 +31,7 @@ public class GomokuRules implements Rules {
     }
 
     private boolean isHorizontalWin(List<Piece> pieces) {
-        Player previousCheckedStone = null;
-        int consecutiveSameColourStonesInRow = 0;
-        int lastPieceColumnPosition = 0;
-
-        for (Piece piece : pieces) {
-            boolean isFirstCheckedStone = previousCheckedStone == null;
-
-            if (isFirstCheckedStone) {
-                previousCheckedStone = piece.getPlayer();
-                lastPieceColumnPosition = piece.getColumn();
-                consecutiveSameColourStonesInRow++;
-                continue;
-            }
-
-            boolean theStoneIsSameColourAsLastStone = previousCheckedStone == piece.getPlayer();
-            boolean thereAreMultipleSameColourStonesInARow = consecutiveSameColourStonesInRow >= 0;
-            boolean theStonesAreUnbroken = lastPieceColumnPosition == (piece.getColumn() - 1);
-            boolean lastRowWasBroken = lastPieceColumnPosition == 0;
-
-            if (theStoneIsSameColourAsLastStone &&
-                    thereAreMultipleSameColourStonesInARow &&
-                    theStonesAreUnbroken ||
-                    lastRowWasBroken) {
-                consecutiveSameColourStonesInRow++;
-                lastPieceColumnPosition = piece.getColumn();
-            } else {
-                consecutiveSameColourStonesInRow = 0;
-                lastPieceColumnPosition = 0;
-            }
-        }
-
-        if (consecutiveSameColourStonesInRow < 5) {
-            return false;
-        }
-
-        return true;
+        return new HorizontalValidator().validateConsecutivePieces(pieces, WINNING_CONSECUTIVE_NUMBER);
     }
 
     private void isValidRow(Move move) throws PositionOutOfBoundsException {

@@ -1,4 +1,4 @@
-package xyz.jacobclark.rules;
+package xyz.jacobclark.unit.rules;
 
 import xyz.jacobclark.exceptions.PositionOutOfBoundsException;
 import xyz.jacobclark.models.Move;
