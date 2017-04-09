@@ -19,6 +19,10 @@ public class Piece {
         return row;
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

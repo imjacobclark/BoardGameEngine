@@ -22,7 +22,7 @@ public class Board {
         Move move = new Move(player, column, row);
         Piece piece = new Piece(move.getPlayer(), move.getColumn(), move.getRow());
 
-        rules.validateMove(pieces, move);
+        rules.validateThatMoveIsLegal(pieces, move);
 
         pieces.add(piece);
 

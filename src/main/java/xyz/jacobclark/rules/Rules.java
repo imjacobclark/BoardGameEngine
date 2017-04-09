@@ -8,5 +8,6 @@ import xyz.jacobclark.models.Piece;
 import java.util.List;
 
 public interface Rules {
-    boolean validateMove(List<Piece> pieces, Move move) throws PositionOccupiedException, PositionOutOfBoundsException;
+    boolean validateThatMoveIsLegal(List<Piece> pieces, Move move) throws PositionOccupiedException, PositionOutOfBoundsException;
+    boolean validateThatGameIsWin(List<Piece> pieces);
 }

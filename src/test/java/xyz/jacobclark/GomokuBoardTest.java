@@ -13,7 +13,6 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static xyz.jacobclark.models.Player.BLACK;
@@ -55,7 +54,7 @@ public class GomokuBoardTest {
 
         board.placePiece(BLACK, 0, 0);
 
-        verify(mockGomokuRules).validateMove(any(), any());
+        verify(mockGomokuRules).validateThatMoveIsLegal(any(), any());
     }
 
     @Test
