@@ -16,6 +16,11 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'info.solidsoft.pitest'
 
+jar {
+    baseName = 'BoardGameEngine'
+    version = '0.0.1'
+}
+
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
@@ -33,4 +38,8 @@ pitest {
     pitestVersion = "1.1.0"
     threads = 4
     outputFormats = ['XML', 'HTML']
+}
+
+task stage {
+    dependsOn build
 }
