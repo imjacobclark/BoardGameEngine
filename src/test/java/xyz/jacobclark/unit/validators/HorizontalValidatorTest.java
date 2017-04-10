@@ -3,8 +3,8 @@ package xyz.jacobclark.unit.validators;
 import org.junit.Test;
 import xyz.jacobclark.models.Piece;
 import xyz.jacobclark.models.Player;
-import xyz.jacobclark.unit.rules.Rules;
-import xyz.jacobclark.unit.rules.impl.GomokuRules;
+import xyz.jacobclark.rules.Rules;
+import xyz.jacobclark.rules.impl.GomokuRules;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -7,8 +7,7 @@ import xyz.jacobclark.Board;
 import xyz.jacobclark.exceptions.PositionOccupiedException;
 import xyz.jacobclark.models.Move;
 import xyz.jacobclark.models.Piece;
-import xyz.jacobclark.models.Player;
-import xyz.jacobclark.unit.rules.impl.GomokuRules;
+import xyz.jacobclark.rules.impl.GomokuRules;
 
 import java.util.List;
 

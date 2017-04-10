@@ -1,11 +1,11 @@
-package xyz.jacobclark.unit.rules.impl;
+package xyz.jacobclark.rules.impl;
 
 import xyz.jacobclark.exceptions.PositionOutOfBoundsException;
 import xyz.jacobclark.models.Move;
 import xyz.jacobclark.exceptions.PositionOccupiedException;
 import xyz.jacobclark.models.Piece;
-import xyz.jacobclark.unit.rules.Rules;
-import xyz.jacobclark.unit.validators.HorizontalValidator;
+import xyz.jacobclark.rules.Rules;
+import xyz.jacobclark.validators.HorizontalValidator;
 
 import java.util.List;
 import java.util.function.Predicate;

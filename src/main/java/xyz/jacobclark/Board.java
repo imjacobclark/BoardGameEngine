@@ -5,7 +5,7 @@ import xyz.jacobclark.exceptions.PositionOutOfBoundsException;
 import xyz.jacobclark.models.Move;
 import xyz.jacobclark.models.Piece;
 import xyz.jacobclark.models.Player;
-import xyz.jacobclark.unit.rules.Rules;
+import xyz.jacobclark.rules.Rules;
 
 import java.util.ArrayList;
 import java.util.List;

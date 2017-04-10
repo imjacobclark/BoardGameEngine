@@ -1,4 +1,4 @@
-package xyz.jacobclark.unit.validators;
+package xyz.jacobclark.validators;
 
 import xyz.jacobclark.models.Piece;
 import xyz.jacobclark.models.Player;
@@ -6,7 +6,7 @@ import xyz.jacobclark.models.Player;
 import java.util.List;
 
 public class HorizontalValidator {
-    public boolean validateConsecutivePieces(List<Piece> pieces, int validConsecutiveNumber){
+    public boolean validateConsecutivePieces(List<Piece> pieces, int validConsecutiveNumber) {
         Player previousCheckedPiece = null;
         int consecutiveSameColourPiecesInRow = 0;
         int lastPieceColumnPosition = 0;
