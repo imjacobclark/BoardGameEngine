@@ -27,8 +27,8 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class BoardControllerTest {
     static final String WEBSOCKET_URI = "ws://localhost:8080/ws";
-    static final String WEBSOCKET_TOPIC_SUBSCRIPTION = "/topic/board";
-    static final String WEBSOCKET_DESTINATION_ENDPOINT = "/app/board";
+    static final String WEBSOCKET_TOPIC_SUBSCRIPTION = "/topic/pieces";
+    static final String WEBSOCKET_DESTINATION_ENDPOINT = "/app/pieces";
 
     private BlockingQueue<String> blockingQueue;
     private WebSocketStompClient stompClient;
@@ -42,7 +42,7 @@ public class BoardControllerTest {
     }
 
     @Test
-    public void successfulMoveCallToWebsocketEndpointReturnsAllCurrentPiecesOnBoard() throws Exception {
+    public void successfulPlacePieceCallToWebsocketPiecesEndpointReturnsAllCurrentPiecesOnBoard() throws Exception {
         StompSession session = stompClient
                 .connect(WEBSOCKET_URI, new StompSessionHandlerAdapter() {
                 })

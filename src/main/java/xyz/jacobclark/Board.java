@@ -18,7 +18,7 @@ public class Board {
         this.rules = rules;
     }
 
-    public Piece placePiece(Player player, int column, int row) throws PositionOccupiedException, PositionOutOfBoundsException {
+    public Piece place(Player player, int column, int row) throws PositionOccupiedException, PositionOutOfBoundsException {
         Move move = new Move(player, column, row);
         Piece piece = new Piece(move.getPlayer(), move.getColumn(), move.getRow());
 
@@ -29,7 +29,7 @@ public class Board {
         return piece;
     }
 
-    public List<Piece> getPieces() {
+    public List<Piece> getAll() {
         return pieces;
     }
 }

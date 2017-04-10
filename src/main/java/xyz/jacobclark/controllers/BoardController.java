@@ -17,15 +17,15 @@ import java.util.List;
 public class BoardController {
     Board board = new Board(new GomokuRules());
 
-    @MessageMapping("/board")
+    @MessageMapping("/pieces")
     public List<Piece> placePiece(Move move) throws PositionOutOfBoundsException, PositionOccupiedException {
-        board.placePiece(move.getPlayer(), move.getColumn(), move.getRow());
-        return board.getPieces();
+        board.place(move.getPlayer(), move.getColumn(), move.getRow());
+        return board.getAll();
     }
 
     @CrossOrigin(origins = "*")
-    @GetMapping("/board")
+    @GetMapping("/pieces")
     public List<Piece> getPieces() {
-        return board.getPieces();
+        return board.getAll();
     }
 }
