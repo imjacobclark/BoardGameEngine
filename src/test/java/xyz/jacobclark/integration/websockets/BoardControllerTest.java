@@ -1,8 +1,7 @@
-package xyz.jacobclark.integration;
+package xyz.jacobclark.integration.websockets;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,6 +10,7 @@ import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
@@ -25,13 +25,13 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class GamesControllerTest {
+public class BoardControllerTest {
     static final String WEBSOCKET_URI = "ws://localhost:8080/ws";
-    static final String WEBSOCKET_TOPIC_SUBSCRIPTION = "/topic/games";
-    static final String WEBSOCKET_DESTINATION_ENDPOINT = "/app/games";
+    static final String WEBSOCKET_TOPIC_SUBSCRIPTION = "/topic/board";
+    static final String WEBSOCKET_DESTINATION_ENDPOINT = "/app/board";
 
-    BlockingQueue<String> blockingQueue;
-    WebSocketStompClient stompClient;
+    private BlockingQueue<String> blockingQueue;
+    private WebSocketStompClient stompClient;
 
     @Before
     public void setup() {

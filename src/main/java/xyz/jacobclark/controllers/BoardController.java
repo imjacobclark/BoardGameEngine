@@ -1,8 +1,9 @@
 package xyz.jacobclark.controllers;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 import xyz.jacobclark.Board;
 import xyz.jacobclark.exceptions.PositionOccupiedException;
 import xyz.jacobclark.models.Move;
@@ -11,14 +12,19 @@ import xyz.jacobclark.rules.impl.GomokuRules;
 
 import java.util.List;
 
-@Controller
-public class GamesController {
+@RestController
+public class BoardController {
     Board board = new Board(new GomokuRules());
 
-    @MessageMapping("/games")
-    @SendTo("/topic/games")
+    @MessageMapping("/board")
     public List<Piece> placePiece(Move move) throws Exception, PositionOccupiedException {
         board.placePiece(move.getPlayer(), move.getColumn(), move.getRow());
+        return board.getPieces();
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/board")
+    public List<Piece> getPieces() {
         return board.getPieces();
     }
 }
