@@ -1,2 +1,2 @@
 # BoardGameEngine
-A board game engine
+A board gomoku engine

@@ -1,7 +1,7 @@
-package xyz.jacobclark.unit;
+package xyz.jacobclark.unit.models;
 
 import org.junit.Test;
-import xyz.jacobclark.Board;
+import xyz.jacobclark.models.Board;
 import xyz.jacobclark.exceptions.NotPlayersTurnException;
 import xyz.jacobclark.exceptions.PositionOccupiedException;
 import xyz.jacobclark.exceptions.PositionOutOfBoundsException;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verify;
 import static xyz.jacobclark.models.PebbleType.BLACK;
 import static xyz.jacobclark.models.PebbleType.WHITE;
 
-public class GomokuBoardTest {
+public class BoardTest {
     Rules gomokuRules = new GomokuRules();
 
     @Test
@@ -28,7 +28,7 @@ public class GomokuBoardTest {
         Board board = new Board(gomokuRules);
         Piece expectedPiece = new Piece(BLACK, 0, 0);
 
-        assertThat(board.place(BLACK, 0, 0), is(expectedPiece));
+        assertThat(board.placePiece(BLACK, 0, 0), is(expectedPiece));
     }
 
     @Test
@@ -36,17 +36,17 @@ public class GomokuBoardTest {
         Board board = new Board(gomokuRules);
         Piece expectedPiece = new Piece(WHITE, 0, 0);
 
-        assertThat(board.place(WHITE, 0, 0), is(expectedPiece));
+        assertThat(board.placePiece(WHITE, 0, 0), is(expectedPiece));
     }
 
     @Test
     public void canPlaceManyStonesAtGivenPositionOnBoard() throws PositionOccupiedException, PositionOutOfBoundsException, NotPlayersTurnException {
         Board board = new Board(gomokuRules);
 
-        assertThat(board.place(BLACK, 0, 0), is(new Piece(BLACK, 0, 0)));
-        assertThat(board.place(WHITE, 0, 1), is(new Piece(WHITE, 0, 1)));
-        assertThat(board.place(BLACK, 1, 0), is(new Piece(BLACK, 1, 0)));
-        assertThat(board.place(WHITE, 1, 1), is(new Piece(WHITE, 1, 1)));
+        assertThat(board.placePiece(BLACK, 0, 0), is(new Piece(BLACK, 0, 0)));
+        assertThat(board.placePiece(WHITE, 0, 1), is(new Piece(WHITE, 0, 1)));
+        assertThat(board.placePiece(BLACK, 1, 0), is(new Piece(BLACK, 1, 0)));
+        assertThat(board.placePiece(WHITE, 1, 1), is(new Piece(WHITE, 1, 1)));
     }
 
     @Test
@@ -54,7 +54,7 @@ public class GomokuBoardTest {
         GomokuRules mockGomokuRules = mock(GomokuRules.class);
         Board board = new Board(mockGomokuRules);
 
-        board.place(BLACK, 0, 0);
+        board.placePiece(BLACK, 0, 0);
 
         verify(mockGomokuRules).validateThatMoveIsLegal(any(), any());
     }
@@ -71,9 +71,9 @@ public class GomokuBoardTest {
         expectedPieces.add(pieceOne);
         expectedPieces.add(pieceTwo);
 
-        board.place(BLACK, 0, 0);
-        board.place(WHITE, 0, 1);
+        board.placePiece(BLACK, 0, 0);
+        board.placePiece(WHITE, 0, 1);
 
-        assertThat(board.getAll(), is(expectedPieces));
+        assertThat(board.getPieces(), is(expectedPieces));
     }
 }
