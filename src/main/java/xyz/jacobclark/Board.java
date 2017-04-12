@@ -3,9 +3,8 @@ package xyz.jacobclark;
 import xyz.jacobclark.exceptions.NotPlayersTurnException;
 import xyz.jacobclark.exceptions.PositionOccupiedException;
 import xyz.jacobclark.exceptions.PositionOutOfBoundsException;
-import xyz.jacobclark.models.Move;
 import xyz.jacobclark.models.Piece;
-import xyz.jacobclark.models.Player;
+import xyz.jacobclark.models.PebbleType;
 import xyz.jacobclark.rules.Rules;
 
 import java.util.ArrayList;
@@ -19,11 +18,10 @@ public class Board {
         this.rules = rules;
     }
 
-    public Piece place(Player player, int column, int row) throws PositionOccupiedException, PositionOutOfBoundsException, NotPlayersTurnException {
-        Move move = new Move(player, column, row);
-        Piece piece = new Piece(move.getPlayer(), move.getColumn(), move.getRow());
+    public Piece place(PebbleType pebbleType, int column, int row) throws PositionOccupiedException, PositionOutOfBoundsException, NotPlayersTurnException {
+        Piece piece = new Piece(pebbleType, column, row);
 
-        rules.validateThatMoveIsLegal(pieces, move);
+        rules.validateThatMoveIsLegal(pieces, piece);
 
         pieces.add(piece);
 

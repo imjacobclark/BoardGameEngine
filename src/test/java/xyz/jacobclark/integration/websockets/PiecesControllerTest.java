@@ -25,7 +25,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class BoardControllerTest {
+public class PiecesControllerTest {
     static final String WEBSOCKET_URI = "ws://localhost:8080/ws";
     static final String WEBSOCKET_TOPIC_SUBSCRIPTION = "/topic/pieces";
     static final String WEBSOCKET_DESTINATION_ENDPOINT = "/app/pieces";

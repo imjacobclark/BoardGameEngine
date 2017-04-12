@@ -17,8 +17,8 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static xyz.jacobclark.models.Player.BLACK;
-import static xyz.jacobclark.models.Player.WHITE;
+import static xyz.jacobclark.models.PebbleType.BLACK;
+import static xyz.jacobclark.models.PebbleType.WHITE;
 
 public class GomokuBoardTest {
     Rules gomokuRules = new GomokuRules();

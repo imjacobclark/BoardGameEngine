@@ -2,7 +2,6 @@ package xyz.jacobclark.rules.impl;
 
 import xyz.jacobclark.exceptions.NotPlayersTurnException;
 import xyz.jacobclark.exceptions.PositionOutOfBoundsException;
-import xyz.jacobclark.models.Move;
 import xyz.jacobclark.exceptions.PositionOccupiedException;
 import xyz.jacobclark.models.Piece;
 import xyz.jacobclark.rules.Rules;
@@ -16,15 +15,15 @@ public class GomokuRules implements Rules {
     public static final int WINNING_CONSECUTIVE_NUMBER = 5;
 
     @Override
-    public boolean validateThatMoveIsLegal(List<Piece> pieces, Move move) throws PositionOccupiedException, PositionOutOfBoundsException, NotPlayersTurnException {
-        if (pieces.stream().anyMatch(twoPiecesAtSameXYIntersectionOnBoard(move)))
+    public boolean validateThatMoveIsLegal(List<Piece> pieces, Piece piece) throws PositionOccupiedException, PositionOutOfBoundsException, NotPlayersTurnException {
+        if (pieces.stream().anyMatch(twoPiecesAtSameXYIntersectionOnBoard(piece)))
             throw new PositionOccupiedException();
 
-        if (pieces.size() > 0 && pieces.get(pieces.size() - 1).getPlayer() == move.getPlayer())
+        if (pieces.size() > 0 && pieces.get(pieces.size() - 1).getPebbleType() == piece.getPebbleType())
             throw new NotPlayersTurnException();
 
-        isValidColumn(move);
-        isValidRow(move);
+        isValidColumn(piece);
+        isValidRow(piece);
 
         return true;
     }
@@ -38,24 +37,24 @@ public class GomokuRules implements Rules {
         return new HorizontalValidator().validateConsecutivePieces(pieces, WINNING_CONSECUTIVE_NUMBER);
     }
 
-    private void isValidRow(Move move) throws PositionOutOfBoundsException {
-        if (move.getRow() > 15)
+    private void isValidRow(Piece piece) throws PositionOutOfBoundsException {
+        if (piece.getRow() > 15)
             throw new PositionOutOfBoundsException();
 
-        if (move.getRow() < 0)
-            throw new PositionOutOfBoundsException();
-    }
-
-    private void isValidColumn(Move move) throws PositionOutOfBoundsException {
-        if (move.getColumn() > 15)
-            throw new PositionOutOfBoundsException();
-
-        if (move.getColumn() < 0)
+        if (piece.getRow() < 0)
             throw new PositionOutOfBoundsException();
     }
 
-    private Predicate<Piece> twoPiecesAtSameXYIntersectionOnBoard(Move move) {
-        return piece ->
-                Integer.valueOf(move.getRow()).equals(piece.getRow()) && Integer.valueOf(move.getColumn()).equals(piece.getColumn());
+    private void isValidColumn(Piece piece) throws PositionOutOfBoundsException {
+        if (piece.getColumn() > 15)
+            throw new PositionOutOfBoundsException();
+
+        if (piece.getColumn() < 0)
+            throw new PositionOutOfBoundsException();
+    }
+
+    private Predicate<Piece> twoPiecesAtSameXYIntersectionOnBoard(Piece piece) {
+        return pieceUnderTest ->
+                Integer.valueOf(pieceUnderTest.getRow()).equals(piece.getRow()) && Integer.valueOf(pieceUnderTest.getColumn()).equals(piece.getColumn());
     }
 }

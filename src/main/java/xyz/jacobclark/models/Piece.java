@@ -1,12 +1,16 @@
 package xyz.jacobclark.models;
 
 public class Piece {
-    private Player player;
+    private PebbleType pebbleType;
     private Integer column;
     private Integer row;
 
-    public Piece(Player player, int column, int row) {
-        this.player = player;
+    public Piece() {
+
+    }
+
+    public Piece(PebbleType pebbleType, int column, int row) {
+        this.pebbleType = pebbleType;
         this.column = column;
         this.row = row;
     }
@@ -19,8 +23,8 @@ public class Piece {
         return row;
     }
 
-    public Player getPlayer() {
-        return player;
+    public PebbleType getPebbleType() {
+        return pebbleType;
     }
 
     @Override
@@ -30,7 +34,7 @@ public class Piece {
 
         Piece piece = (Piece) o;
 
-        if (player != piece.player) return false;
+        if (pebbleType != piece.pebbleType) return false;
         if (column != null ? !column.equals(piece.column) : piece.column != null) return false;
         return row != null ? row.equals(piece.row) : piece.row == null;
     }

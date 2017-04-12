@@ -6,14 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import xyz.jacobclark.controllers.BoardController;
+import xyz.jacobclark.controllers.PiecesController;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(BoardController.class)
-public class BoardControllerTest {
+@WebMvcTest(PiecesController.class)
+public class PiecesControllerTest {
 
     @Autowired
     private MockMvc mvc;

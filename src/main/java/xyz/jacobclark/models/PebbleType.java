@@ -1,6 +1,6 @@
 package xyz.jacobclark.models;
 
-public enum Player {
+public enum PebbleType {
     BLACK,
     WHITE
 }

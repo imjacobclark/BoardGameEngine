@@ -8,19 +8,18 @@ import xyz.jacobclark.Board;
 import xyz.jacobclark.exceptions.NotPlayersTurnException;
 import xyz.jacobclark.exceptions.PositionOccupiedException;
 import xyz.jacobclark.exceptions.PositionOutOfBoundsException;
-import xyz.jacobclark.models.Move;
 import xyz.jacobclark.models.Piece;
 import xyz.jacobclark.rules.impl.GomokuRules;
 
 import java.util.List;
 
 @RestController
-public class BoardController {
+public class PiecesController {
     Board board = new Board(new GomokuRules());
 
     @MessageMapping("/pieces")
-    public List<Piece> placePiece(Move move) throws PositionOutOfBoundsException, PositionOccupiedException, NotPlayersTurnException {
-        board.place(move.getPlayer(), move.getColumn(), move.getRow());
+    public List<Piece> placePiece(Piece move) throws PositionOutOfBoundsException, PositionOccupiedException, NotPlayersTurnException {
+        board.place(move.getPebbleType(), move.getColumn(), move.getRow());
         return board.getAll();
     }
 

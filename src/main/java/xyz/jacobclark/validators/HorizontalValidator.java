@@ -1,13 +1,13 @@
 package xyz.jacobclark.validators;
 
 import xyz.jacobclark.models.Piece;
-import xyz.jacobclark.models.Player;
+import xyz.jacobclark.models.PebbleType;
 
 import java.util.List;
 
 public class HorizontalValidator {
     public boolean validateConsecutivePieces(List<Piece> pieces, int validConsecutiveNumber) {
-        Player previousCheckedPiece = null;
+        PebbleType previousCheckedPiece = null;
         int consecutiveSameColourPiecesInRow = 0;
         int lastPieceColumnPosition = 0;
 
@@ -15,13 +15,13 @@ public class HorizontalValidator {
             boolean isFirstCheckedPiece = previousCheckedPiece == null;
 
             if (isFirstCheckedPiece) {
-                previousCheckedPiece = piece.getPlayer();
+                previousCheckedPiece = piece.getPebbleType();
                 lastPieceColumnPosition = piece.getColumn();
                 consecutiveSameColourPiecesInRow++;
                 continue;
             }
 
-            boolean thePieceIsSameColourAsLastPiece = previousCheckedPiece == piece.getPlayer();
+            boolean thePieceIsSameColourAsLastPiece = previousCheckedPiece == piece.getPebbleType();
             boolean thereAreMultipleSameColourPiecesInARow = consecutiveSameColourPiecesInRow > 0;
             boolean thePiecesAreUnbroken = lastPieceColumnPosition == (piece.getColumn() - 1);
             boolean lastRowWasBroken = lastPieceColumnPosition == 0;
