@@ -3,4 +3,4 @@ A board gomoku engine
 
 ### Running engines:
 
-* Gomoku -> [Gomoku!](gomoku-engine.herokuapp.com/board)
+* Gomoku -> [Gomoku!](https://gomoku-engine.herokuapp.com/board)
