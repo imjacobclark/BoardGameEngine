@@ -1,6 +1,7 @@
 package xyz.jacobclark.unit.rules;
 
 import org.junit.Test;
+import xyz.jacobclark.exceptions.NotPlayersTurnException;
 import xyz.jacobclark.exceptions.PositionOccupiedException;
 import xyz.jacobclark.exceptions.PositionOutOfBoundsException;
 import xyz.jacobclark.models.Move;
@@ -20,13 +21,13 @@ public class GomokuRulesTest {
     Rules gomokuRules = new GomokuRules();
 
     @Test
-    public void canExecuteAValidMove() throws PositionOutOfBoundsException, PositionOccupiedException {
+    public void canExecuteAValidMove() throws PositionOutOfBoundsException, PositionOccupiedException, NotPlayersTurnException {
         boolean result = gomokuRules.validateThatMoveIsLegal(new ArrayList<>(), new Move(Player.BLACK, 15, 15));
         assertTrue(result);
     }
 
     @Test(expected = PositionOccupiedException.class)
-    public void canNotPlaceAStoneAtGivenPositionOnBoard_WhenAStoneIsAlreadyPlacedThere() throws PositionOccupiedException, PositionOutOfBoundsException {
+    public void canNotPlaceAStoneAtGivenPositionOnBoard_WhenAStoneIsAlreadyPlacedThere() throws PositionOccupiedException, PositionOutOfBoundsException, NotPlayersTurnException {
         List<Piece> pieces = new ArrayList<>();
         pieces.add(new Piece(Player.BLACK, 0, 0));
 
@@ -34,23 +35,33 @@ public class GomokuRulesTest {
     }
 
     @Test(expected = PositionOutOfBoundsException.class)
-    public void canNotPlaceAStoneAtGivenPositionOnBoard_WhenItIsInAnNonExistentUpperBoundColumn() throws PositionOutOfBoundsException, PositionOccupiedException {
+    public void canNotPlaceAStoneAtGivenPositionOnBoard_WhenItIsInAnNonExistentUpperBoundColumn() throws PositionOutOfBoundsException, PositionOccupiedException, NotPlayersTurnException {
         gomokuRules.validateThatMoveIsLegal(new ArrayList<>(), new Move(Player.BLACK, 16, 15));
     }
 
     @Test(expected = PositionOutOfBoundsException.class)
-    public void canNotPlaceAStoneAtGivenPositionOnBoard_WhenItIsInAnNonExistentUpperBoundRow() throws PositionOutOfBoundsException, PositionOccupiedException {
+    public void canNotPlaceAStoneAtGivenPositionOnBoard_WhenItIsInAnNonExistentUpperBoundRow() throws PositionOutOfBoundsException, PositionOccupiedException, NotPlayersTurnException {
         gomokuRules.validateThatMoveIsLegal(new ArrayList<>(), new Move(Player.BLACK, 15, 16));
     }
 
     @Test(expected = PositionOutOfBoundsException.class)
-    public void canNotPlaceAStoneAtGivenPositionOnBoard_WhenItIsInAnNonExistentLowerBoundColumn() throws PositionOutOfBoundsException, PositionOccupiedException {
+    public void canNotPlaceAStoneAtGivenPositionOnBoard_WhenItIsInAnNonExistentLowerBoundColumn() throws PositionOutOfBoundsException, PositionOccupiedException, NotPlayersTurnException {
         gomokuRules.validateThatMoveIsLegal(new ArrayList<>(), new Move(Player.BLACK, -16, 15));
 
     }
 
     @Test(expected = PositionOutOfBoundsException.class)
-    public void canNotPlaceAStoneAtGivenPositionOnBoard_WhenItIsInAnNonExistentLowerBoundRow() throws PositionOutOfBoundsException, PositionOccupiedException {
+    public void canNotPlaceAStoneAtGivenPositionOnBoard_WhenItIsInAnNonExistentLowerBoundRow() throws PositionOutOfBoundsException, PositionOccupiedException, NotPlayersTurnException {
         gomokuRules.validateThatMoveIsLegal(new ArrayList<>(), new Move(Player.BLACK, 15, -16));
+    }
+
+    @Test(expected = NotPlayersTurnException.class)
+    public void canNotPlaceSameColouredStoneTwiceInARow() throws Exception, PositionOccupiedException, NotPlayersTurnException {
+        ArrayList<Piece> pieces = new ArrayList<>();
+        pieces.add(new Piece(Player.BLACK, 0,0 ));
+        pieces.add(new Piece(Player.WHITE, 0,1 ));
+        pieces.add(new Piece(Player.BLACK, 0,2 ));
+
+        gomokuRules.validateThatMoveIsLegal(pieces, new Move(Player.BLACK, 0, 3));
     }
 }

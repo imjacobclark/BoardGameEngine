@@ -1,5 +1,6 @@
 package xyz.jacobclark.rules.impl;
 
+import xyz.jacobclark.exceptions.NotPlayersTurnException;
 import xyz.jacobclark.exceptions.PositionOutOfBoundsException;
 import xyz.jacobclark.models.Move;
 import xyz.jacobclark.exceptions.PositionOccupiedException;
@@ -15,9 +16,12 @@ public class GomokuRules implements Rules {
     public static final int WINNING_CONSECUTIVE_NUMBER = 5;
 
     @Override
-    public boolean validateThatMoveIsLegal(List<Piece> pieces, Move move) throws PositionOccupiedException, PositionOutOfBoundsException {
+    public boolean validateThatMoveIsLegal(List<Piece> pieces, Move move) throws PositionOccupiedException, PositionOutOfBoundsException, NotPlayersTurnException {
         if (pieces.stream().anyMatch(twoPiecesAtSameXYIntersectionOnBoard(move)))
             throw new PositionOccupiedException();
+
+        if (pieces.size() > 0 && pieces.get(pieces.size() - 1).getPlayer() == move.getPlayer())
+            throw new NotPlayersTurnException();
 
         isValidColumn(move);
         isValidRow(move);

@@ -2,6 +2,7 @@ package xyz.jacobclark.unit;
 
 import org.junit.Test;
 import xyz.jacobclark.Board;
+import xyz.jacobclark.exceptions.NotPlayersTurnException;
 import xyz.jacobclark.exceptions.PositionOccupiedException;
 import xyz.jacobclark.exceptions.PositionOutOfBoundsException;
 import xyz.jacobclark.models.Piece;
@@ -23,7 +24,7 @@ public class GomokuBoardTest {
     Rules gomokuRules = new GomokuRules();
 
     @Test
-    public void canPlaceABlackStoneAtGivenPositionOnBoard() throws PositionOccupiedException, PositionOutOfBoundsException {
+    public void canPlaceABlackStoneAtGivenPositionOnBoard() throws PositionOccupiedException, PositionOutOfBoundsException, NotPlayersTurnException {
         Board board = new Board(gomokuRules);
         Piece expectedPiece = new Piece(BLACK, 0, 0);
 
@@ -31,7 +32,7 @@ public class GomokuBoardTest {
     }
 
     @Test
-    public void canPlaceAWhiteStoneAtGivenPositionOnBoard() throws PositionOccupiedException, PositionOutOfBoundsException {
+    public void canPlaceAWhiteStoneAtGivenPositionOnBoard() throws PositionOccupiedException, PositionOutOfBoundsException, NotPlayersTurnException {
         Board board = new Board(gomokuRules);
         Piece expectedPiece = new Piece(WHITE, 0, 0);
 
@@ -39,7 +40,7 @@ public class GomokuBoardTest {
     }
 
     @Test
-    public void canPlaceManyStonesAtGivenPositionOnBoard() throws PositionOccupiedException, PositionOutOfBoundsException {
+    public void canPlaceManyStonesAtGivenPositionOnBoard() throws PositionOccupiedException, PositionOutOfBoundsException, NotPlayersTurnException {
         Board board = new Board(gomokuRules);
 
         assertThat(board.place(BLACK, 0, 0), is(new Piece(BLACK, 0, 0)));
@@ -49,7 +50,7 @@ public class GomokuBoardTest {
     }
 
     @Test
-    public void moveIsValidated_WhenStoneIsPlaced() throws PositionOutOfBoundsException, PositionOccupiedException {
+    public void moveIsValidated_WhenStoneIsPlaced() throws PositionOutOfBoundsException, PositionOccupiedException, NotPlayersTurnException {
         GomokuRules mockGomokuRules = mock(GomokuRules.class);
         Board board = new Board(mockGomokuRules);
 
@@ -59,19 +60,19 @@ public class GomokuBoardTest {
     }
 
     @Test
-    public void canRetrievePlacedStonesonBoard() throws Exception, PositionOccupiedException {
+    public void canRetrievePlacedStonesOnBoard() throws Exception, PositionOccupiedException, NotPlayersTurnException {
         Board board = new Board(gomokuRules);
 
         List<Piece> expectedPieces = new ArrayList<>();
 
         Piece pieceOne = new Piece(BLACK, 0, 0);
-        Piece pieceTwo = new Piece(BLACK, 0, 1);
+        Piece pieceTwo = new Piece(WHITE, 0, 1);
 
         expectedPieces.add(pieceOne);
         expectedPieces.add(pieceTwo);
 
         board.place(BLACK, 0, 0);
-        board.place(BLACK, 0, 1);
+        board.place(WHITE, 0, 1);
 
         assertThat(board.getAll(), is(expectedPieces));
     }

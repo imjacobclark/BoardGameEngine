@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import xyz.jacobclark.controllers.BoardController;
+import xyz.jacobclark.exceptions.NotPlayersTurnException;
 import xyz.jacobclark.exceptions.PositionOccupiedException;
 import xyz.jacobclark.models.Move;
 import xyz.jacobclark.models.Piece;
@@ -19,7 +20,7 @@ import static org.hamcrest.core.Is.is;
 public class BoardControllerTest {
 
     @Test
-    public void placePieceAddsPiece_AndReturnsCurrentBoardState() throws Exception, PositionOccupiedException {
+    public void placePieceAddsPiece_AndReturnsCurrentBoardState() throws Exception, PositionOccupiedException, NotPlayersTurnException {
         BoardController boardController = new BoardController();
         List<Piece> pieces = boardController.placePiece(new Move(Player.BLACK, 0, 0));
 
@@ -30,7 +31,7 @@ public class BoardControllerTest {
     }
 
     @Test
-    public void getPiecesReturnsAllPiecesOnBoard() throws Exception, PositionOccupiedException {
+    public void getPiecesReturnsAllPiecesOnBoard() throws Exception, PositionOccupiedException, NotPlayersTurnException {
         List<Piece> expectedPieces = new ArrayList<>();
         expectedPieces.add(new Piece(Player.BLACK, 0, 0));
 

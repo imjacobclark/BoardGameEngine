@@ -1,5 +1,6 @@
 package xyz.jacobclark;
 
+import xyz.jacobclark.exceptions.NotPlayersTurnException;
 import xyz.jacobclark.exceptions.PositionOccupiedException;
 import xyz.jacobclark.exceptions.PositionOutOfBoundsException;
 import xyz.jacobclark.models.Move;
@@ -18,7 +19,7 @@ public class Board {
         this.rules = rules;
     }
 
-    public Piece place(Player player, int column, int row) throws PositionOccupiedException, PositionOutOfBoundsException {
+    public Piece place(Player player, int column, int row) throws PositionOccupiedException, PositionOutOfBoundsException, NotPlayersTurnException {
         Move move = new Move(player, column, row);
         Piece piece = new Piece(move.getPlayer(), move.getColumn(), move.getRow());
 

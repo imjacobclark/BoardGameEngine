@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import xyz.jacobclark.Board;
+import xyz.jacobclark.exceptions.NotPlayersTurnException;
 import xyz.jacobclark.exceptions.PositionOccupiedException;
 import xyz.jacobclark.exceptions.PositionOutOfBoundsException;
 import xyz.jacobclark.models.Move;
@@ -18,7 +19,7 @@ public class BoardController {
     Board board = new Board(new GomokuRules());
 
     @MessageMapping("/pieces")
-    public List<Piece> placePiece(Move move) throws PositionOutOfBoundsException, PositionOccupiedException {
+    public List<Piece> placePiece(Move move) throws PositionOutOfBoundsException, PositionOccupiedException, NotPlayersTurnException {
         board.place(move.getPlayer(), move.getColumn(), move.getRow());
         return board.getAll();
     }
