@@ -1,4 +1,4 @@
 package xyz.jacobclark.exceptions;
 
-public class PositionOccupiedException extends Throwable {
+public class PositionOccupiedException extends Exception {
 }

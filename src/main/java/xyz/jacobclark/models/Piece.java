@@ -38,4 +38,12 @@ public class Piece {
         if (column != null ? !column.equals(piece.column) : piece.column != null) return false;
         return row != null ? row.equals(piece.row) : piece.row == null;
     }
+
+    @Override
+    public int hashCode() {
+        int result = pebbleType != null ? pebbleType.hashCode() : 0;
+        result = 31 * result + (column != null ? column.hashCode() : 0);
+        result = 31 * result + (row != null ? row.hashCode() : 0);
+        return result;
+    }
 }

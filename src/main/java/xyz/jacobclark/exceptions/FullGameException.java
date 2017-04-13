@@ -1,5 +1,5 @@
 package xyz.jacobclark.exceptions;
 
 
-public class FullGameException extends Throwable {
+public class FullGameException extends Exception {
 }
