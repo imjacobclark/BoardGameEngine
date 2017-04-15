@@ -28,7 +28,7 @@ public class BoardTest {
         Board board = new Board(gomokuRules);
         Piece expectedPiece = new Piece(BLACK, 0, 0);
 
-        assertThat(board.placePiece(BLACK, 0, 0), is(expectedPiece));
+        assertThat(board.placePiece(new Piece(BLACK, 0, 0)), is(expectedPiece));
     }
 
     @Test
@@ -36,17 +36,17 @@ public class BoardTest {
         Board board = new Board(gomokuRules);
         Piece expectedPiece = new Piece(WHITE, 0, 0);
 
-        assertThat(board.placePiece(WHITE, 0, 0), is(expectedPiece));
+        assertThat(board.placePiece(new Piece(WHITE, 0, 0)), is(expectedPiece));
     }
 
     @Test
     public void canPlaceManyStonesAtGivenPositionOnBoard() throws PositionOccupiedException, PositionOutOfBoundsException, NotPlayersTurnException {
         Board board = new Board(gomokuRules);
 
-        assertThat(board.placePiece(BLACK, 0, 0), is(new Piece(BLACK, 0, 0)));
-        assertThat(board.placePiece(WHITE, 0, 1), is(new Piece(WHITE, 0, 1)));
-        assertThat(board.placePiece(BLACK, 1, 0), is(new Piece(BLACK, 1, 0)));
-        assertThat(board.placePiece(WHITE, 1, 1), is(new Piece(WHITE, 1, 1)));
+        assertThat(board.placePiece(new Piece(BLACK, 0, 0)), is(new Piece(BLACK, 0, 0)));
+        assertThat(board.placePiece(new Piece(WHITE, 0, 1)), is(new Piece(WHITE, 0, 1)));
+        assertThat(board.placePiece(new Piece(BLACK, 1, 0)), is(new Piece(BLACK, 1, 0)));
+        assertThat(board.placePiece(new Piece(WHITE, 1, 1)), is(new Piece(WHITE, 1, 1)));
     }
 
     @Test
@@ -54,7 +54,7 @@ public class BoardTest {
         GomokuRules mockGomokuRules = mock(GomokuRules.class);
         Board board = new Board(mockGomokuRules);
 
-        board.placePiece(BLACK, 0, 0);
+        board.placePiece(new Piece(BLACK, 0, 0));
 
         verify(mockGomokuRules).validateThatMoveIsLegal(any(), any());
     }
@@ -71,8 +71,8 @@ public class BoardTest {
         expectedPieces.add(pieceOne);
         expectedPieces.add(pieceTwo);
 
-        board.placePiece(BLACK, 0, 0);
-        board.placePiece(WHITE, 0, 1);
+        board.placePiece(new Piece(BLACK, 0, 0));
+        board.placePiece(new Piece(WHITE, 0, 1));
 
         assertThat(board.getPieces(), is(expectedPieces));
     }

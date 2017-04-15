@@ -21,9 +21,7 @@ public class Board {
         this.rules = rules;
     }
 
-    public Piece placePiece(PebbleType pebbleType, int column, int row) throws PositionOccupiedException, PositionOutOfBoundsException, NotPlayersTurnException {
-        Piece piece = new Piece(pebbleType, column, row);
-
+    public Piece placePiece(Piece piece) throws PositionOccupiedException, PositionOutOfBoundsException, NotPlayersTurnException {
         rules.validateThatMoveIsLegal(pieces, piece);
 
         pieces.add(piece);

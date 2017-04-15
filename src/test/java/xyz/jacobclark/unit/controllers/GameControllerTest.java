@@ -24,7 +24,7 @@ public class GameControllerTest {
     public void placePieceAddsPiece_AndReturnsCurrentBoardState() throws Exception, PositionOccupiedException, NotPlayersTurnException {
         GameController gameController = new GameController();
         Game game = gameController.createGame();
-        List<Piece> pieces = gameController.getPieces(game.getId(), new Piece(PebbleType.BLACK, 0, 0));
+        List<Piece> pieces = gameController.placePiece(game.getId(), new Piece(PebbleType.BLACK, 0, 0));
 
         List<Piece> expectedPieces = new ArrayList<>();
         expectedPieces.add(new Piece(PebbleType.BLACK, 0, 0));

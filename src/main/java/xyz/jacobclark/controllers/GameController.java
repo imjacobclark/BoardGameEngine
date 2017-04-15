@@ -20,8 +20,8 @@ public class GameController {
 
     @MessageMapping("/games/{uuid}/pieces")
     @SendTo("/topic/games/pieces")
-    public List<Piece> getPieces(@DestinationVariable UUID uuid, Piece move) throws PositionOutOfBoundsException, PositionOccupiedException, NotPlayersTurnException {
-        games.get(uuid).getBoard().placePiece(move.getPebbleType(), move.getColumn(), move.getRow());
+    public List<Piece> placePiece(@DestinationVariable UUID uuid, Piece move) throws PositionOutOfBoundsException, PositionOccupiedException, NotPlayersTurnException {
+        games.get(uuid).getBoard().placePiece(move);
         return games.get(uuid).getBoard().getPieces();
     }
 
