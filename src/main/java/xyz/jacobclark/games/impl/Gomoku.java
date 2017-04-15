@@ -14,12 +14,12 @@ import java.util.UUID;
 public class Gomoku implements Game {
     private ArrayList<Player> players = new ArrayList<>();
     private Board board;
-    private UUID id;
+    private UUID uuid;
     private GameTitle title;
 
     public Gomoku() {
         this.title = GameTitle.GOMOKU;
-        this.id = UUID.randomUUID();
+        this.uuid = UUID.randomUUID();
         this.board = new Board(new GomokuRules());
         this.players.add(new Player(UUID.randomUUID(), PebbleType.BLACK));
     }
@@ -35,15 +35,19 @@ public class Gomoku implements Game {
     }
 
     @Override
-    public void addPlayer() throws FullGameException {
+    public Player addPlayer() throws FullGameException {
         if (this.players.size() > 1) throw new FullGameException();
 
-        this.players.add(new Player(UUID.randomUUID(), PebbleType.WHITE));
+        Player player = new Player(UUID.randomUUID(), PebbleType.WHITE);
+
+        this.players.add(player);
+
+        return player;
     }
 
     @Override
-    public UUID getId() {
-        return id;
+    public UUID getUuid() {
+        return uuid;
     }
 
     @Override

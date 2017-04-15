@@ -1,12 +1,9 @@
 package xyz.jacobclark.integration.websockets;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
@@ -14,13 +11,11 @@ import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
-import xyz.jacobclark.controllers.GameController;
 import xyz.jacobclark.games.impl.Gomoku;
 
 import java.lang.reflect.Type;
@@ -59,8 +54,8 @@ public class GameControllerTest {
 
         session.subscribe(WEBSOCKET_TOPIC_SUBSCRIPTION, new MockStompFrameHandler());
 
-        session.send("/app/games/" + response.getBody().getId() + "/pieces", "{\"pebbleType\": \"BLACK\", \"column\": 0, \"row\": 0}".getBytes());
-        session.send("/app/games/" + response.getBody().getId() + "/pieces", "{\"pebbleType\": \"WHITE\", \"column\": 0, \"row\": 1}".getBytes());
+        session.send("/app/games/" + response.getBody().getUuid() + "/pieces", "{\"pebbleType\": \"BLACK\", \"column\": 0, \"row\": 0}".getBytes());
+        session.send("/app/games/" + response.getBody().getUuid() + "/pieces", "{\"pebbleType\": \"WHITE\", \"column\": 0, \"row\": 1}".getBytes());
 
         String message = blockingQueue.poll(1, SECONDS);
 

@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public interface Game {
-    UUID getId();
+    UUID getUuid();
 
     ArrayList<Player> getPlayers();
 
     Board getBoard();
 
-    void addPlayer() throws FullGameException;
+    Player addPlayer() throws FullGameException;
 
     GameTitle getTitle();
 }

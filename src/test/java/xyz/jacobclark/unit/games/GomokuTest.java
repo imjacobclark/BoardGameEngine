@@ -7,6 +7,7 @@ import xyz.jacobclark.exceptions.FullGameException;
 import xyz.jacobclark.games.impl.Gomoku;
 import xyz.jacobclark.models.GameTitle;
 import xyz.jacobclark.models.PebbleType;
+import xyz.jacobclark.models.Player;
 import xyz.jacobclark.rules.impl.GomokuRules;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,7 +26,7 @@ public class GomokuTest {
     public void uponNewGomokuGameCreation_ANewBoard_WithAUniqueId_IsCreated() throws Exception {
         Gomoku gomoku = new Gomoku();
 
-        assertTrue(gomoku.getId().toString().contains("-"));
+        assertTrue(gomoku.getUuid().toString().contains("-"));
     }
 
     @Test
@@ -46,7 +47,10 @@ public class GomokuTest {
     public void canAddASecond_WhitePlayerToGomokuGame() throws Exception, FullGameException {
         Game game = new Gomoku();
 
-        game.addPlayer();
+        Player player = game.addPlayer();
+
+        assertThat(player.getPebbleType(), is(PebbleType.WHITE));
+        assertTrue(player.getUuid().toString().contains("-"));
 
         assertThat(game.getPlayers().size(), is(2));
         assertThat(game.getPlayers().get(0).getPebbleType(), is(PebbleType.BLACK));

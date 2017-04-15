@@ -28,7 +28,7 @@ public class GameController {
     @PostMapping("/games")
     public Game createGame() {
         Game game = new Gomoku();
-        games.put(game.getId(), game);
+        games.put(game.getUuid(), game);
         return game;
     }
 
