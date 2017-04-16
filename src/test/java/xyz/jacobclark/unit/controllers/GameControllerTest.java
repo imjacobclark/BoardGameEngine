@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import xyz.jacobclark.controllers.GameController;
+import xyz.jacobclark.exceptions.FullGameException;
 import xyz.jacobclark.exceptions.NotPlayersTurnException;
 import xyz.jacobclark.exceptions.PlayerNotFoundException;
 import xyz.jacobclark.exceptions.PositionOccupiedException;
@@ -11,6 +12,7 @@ import xyz.jacobclark.games.Game;
 import xyz.jacobclark.models.Move;
 import xyz.jacobclark.models.PebbleType;
 import xyz.jacobclark.models.Piece;
+import xyz.jacobclark.models.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +20,9 @@ import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.any;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameControllerTest {
@@ -35,7 +39,7 @@ public class GameControllerTest {
         List<Piece> expectedPieces = new ArrayList<>();
         expectedPieces.add(new Piece(PebbleType.BLACK, 0, 0));
 
-        assertThat(pieces, is(expectedPieces));
+        assertThat(pieces, samePropertyValuesAs(expectedPieces));
     }
 
     @Test(expected = PlayerNotFoundException.class)
@@ -70,5 +74,29 @@ public class GameControllerTest {
         Game expectedGame = gameController.getGame(newGame.getUuid());
 
         assertThat(expectedGame.getUuid(), is(newGame.getUuid()));
+    }
+
+    @Test
+    public void joinGame_ShouldAddANewPlayerToTheGame_AndReturnNewlyCreatedPlayer() throws Exception {
+        GameController gameController = new GameController();
+        Game game = gameController.createGame();
+
+        Player player = gameController.joinGame(game.getUuid());
+
+        assertThat(player.getPebbleType(), is(PebbleType.WHITE));
+        assertTrue(player.getUuid().toString().contains("-"));
+
+        assertThat(game.getPlayers().size(), is(2));
+        assertThat(game.getPlayers().get(0).getPebbleType(), is(PebbleType.BLACK));
+        assertThat(game.getPlayers().get(1).getPebbleType(), is(PebbleType.WHITE));
+    }
+
+    @Test(expected = FullGameException.class)
+    public void joinGame_ShouldThrowException_WhenMoreThanTwoPlayersAreInASingleGame() throws Exception {
+        GameController gameController = new GameController();
+        Game game = gameController.createGame();
+
+        gameController.joinGame(game.getUuid());
+        gameController.joinGame(game.getUuid());
     }
 }

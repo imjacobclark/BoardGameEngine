@@ -4,10 +4,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
-import xyz.jacobclark.exceptions.NotPlayersTurnException;
-import xyz.jacobclark.exceptions.PlayerNotFoundException;
-import xyz.jacobclark.exceptions.PositionOccupiedException;
-import xyz.jacobclark.exceptions.PositionOutOfBoundsException;
+import xyz.jacobclark.exceptions.*;
 import xyz.jacobclark.games.Game;
 import xyz.jacobclark.games.impl.Gomoku;
 import xyz.jacobclark.models.Move;
@@ -29,7 +26,7 @@ public class GameController {
         return games.get(uuid).getBoard().getPieces();
     }
 
-    private Player getPlayerToMove(@DestinationVariable UUID uuid, Move move) throws PlayerNotFoundException {
+    private Player getPlayerToMove(UUID uuid, Move move) throws PlayerNotFoundException {
         Optional<Player> playerToMove = games
                 .get(uuid)
                 .getPlayers()
@@ -56,5 +53,10 @@ public class GameController {
     @GetMapping("/games/{uuid}")
     public Game getGame(@PathVariable UUID uuid) {
         return games.get(uuid);
+    }
+
+    @PostMapping("/games/{uuid}/players")
+    public Player joinGame(@PathVariable UUID uuid) throws FullGameException {
+        return games.get(uuid).addPlayer();
     }
 }

@@ -32,4 +32,20 @@ public class GameControllerTest {
                 .andExpect(jsonPath("$.title", is("GOMOKU")))
                 .andExpect(header().string("Access-Control-Allow-Origin", "http://some-random-url.com"));
     }
+
+    @Test
+    public void post_JoinGame_ReturnsCreatedPlayer() throws Exception {
+        String response = this.mvc.perform(post("/games")).andReturn().getResponse().getContentAsString();
+
+        Gomoku game = new ObjectMapper().readValue(response, Gomoku.class);
+        this.mvc.perform(post("/games/" + game.getUuid() + "/players").header("Origin", "http://some-random-url.com"))
+                .andExpect(jsonPath("$.pebbleType", is("WHITE")))
+                .andExpect(header().string("Access-Control-Allow-Origin", "http://some-random-url.com"));
+
+        this.mvc.perform(get("/games/" + game.getUuid()).header("Origin", "http://some-random-url.com"))
+                .andExpect(jsonPath("$.players[0].pebbleType", is("BLACK")))
+                .andExpect(jsonPath("$.players[1].pebbleType", is("WHITE")))
+                .andExpect(jsonPath("$.title", is("GOMOKU")))
+                .andExpect(header().string("Access-Control-Allow-Origin", "http://some-random-url.com"));
+    }
 }

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.beans.SamePropertyValuesAs.samePropertyValuesAs;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -28,7 +29,7 @@ public class BoardTest {
         Board board = new Board(gomokuRules);
         Piece expectedPiece = new Piece(BLACK, 0, 0);
 
-        assertThat(board.placePiece(new Piece(BLACK, 0, 0)), is(expectedPiece));
+        assertThat(board.placePiece(new Piece(BLACK, 0, 0)), samePropertyValuesAs(expectedPiece));
     }
 
     @Test
@@ -36,17 +37,17 @@ public class BoardTest {
         Board board = new Board(gomokuRules);
         Piece expectedPiece = new Piece(WHITE, 0, 0);
 
-        assertThat(board.placePiece(new Piece(WHITE, 0, 0)), is(expectedPiece));
+        assertThat(board.placePiece(new Piece(WHITE, 0, 0)), samePropertyValuesAs(expectedPiece));
     }
 
     @Test
     public void canPlaceManyStonesAtGivenPositionOnBoard() throws PositionOccupiedException, PositionOutOfBoundsException, NotPlayersTurnException {
         Board board = new Board(gomokuRules);
 
-        assertThat(board.placePiece(new Piece(BLACK, 0, 0)), is(new Piece(BLACK, 0, 0)));
-        assertThat(board.placePiece(new Piece(WHITE, 0, 1)), is(new Piece(WHITE, 0, 1)));
-        assertThat(board.placePiece(new Piece(BLACK, 1, 0)), is(new Piece(BLACK, 1, 0)));
-        assertThat(board.placePiece(new Piece(WHITE, 1, 1)), is(new Piece(WHITE, 1, 1)));
+        assertThat(board.placePiece(new Piece(BLACK, 0, 0)), samePropertyValuesAs(new Piece(BLACK, 0, 0)));
+        assertThat(board.placePiece(new Piece(WHITE, 0, 1)), samePropertyValuesAs(new Piece(WHITE, 0, 1)));
+        assertThat(board.placePiece(new Piece(BLACK, 1, 0)), samePropertyValuesAs(new Piece(BLACK, 1, 0)));
+        assertThat(board.placePiece(new Piece(WHITE, 1, 1)), samePropertyValuesAs(new Piece(WHITE, 1, 1)));
     }
 
     @Test
@@ -74,6 +75,6 @@ public class BoardTest {
         board.placePiece(new Piece(BLACK, 0, 0));
         board.placePiece(new Piece(WHITE, 0, 1));
 
-        assertThat(board.getPieces(), is(expectedPieces));
+        assertThat(board.getPieces(), samePropertyValuesAs(expectedPieces));
     }
 }
