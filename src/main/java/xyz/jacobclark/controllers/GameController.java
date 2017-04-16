@@ -25,21 +25,21 @@ public class GameController {
     @MessageMapping("/games/{uuid}/pieces")
     @SendTo("/topic/games/pieces")
     public List<Piece> placePiece(@DestinationVariable UUID uuid, Move move) throws PositionOutOfBoundsException, PositionOccupiedException, NotPlayersTurnException, PlayerNotFoundException {
-        games.get(uuid).getBoard().placePiece(getMovedPiece(uuid, move));
+        games.get(uuid).getBoard().placePiece(new Piece(getPlayerToMove(uuid, move).getPebbleType(), move.getColumn(), move.getRow()));
         return games.get(uuid).getBoard().getPieces();
     }
 
-    private Piece getMovedPiece(@DestinationVariable UUID uuid, Move move) throws PlayerNotFoundException {
-        Optional<Player> currentPlayer = games
+    private Player getPlayerToMove(@DestinationVariable UUID uuid, Move move) throws PlayerNotFoundException {
+        Optional<Player> playerToMove = games
                 .get(uuid)
                 .getPlayers()
                 .stream()
                 .filter(getPlayerByUuid(move.getPlayerUuid()))
                 .findAny();
 
-        if (!currentPlayer.isPresent()) throw new PlayerNotFoundException();
+        if (!playerToMove.isPresent()) throw new PlayerNotFoundException();
 
-        return new Piece(currentPlayer.get().getPebbleType(), move.getColumn(), move.getRow());
+        return playerToMove.get();
     }
 
     private Predicate<Player> getPlayerByUuid(UUID playersUuid) {
