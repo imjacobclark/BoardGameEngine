@@ -5,10 +5,6 @@ public class Piece {
     private Integer column;
     private Integer row;
 
-    public Piece() {
-
-    }
-
     public Piece(PebbleType pebbleType, int column, int row) {
         this.pebbleType = pebbleType;
         this.column = column;

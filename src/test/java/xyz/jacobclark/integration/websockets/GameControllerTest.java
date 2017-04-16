@@ -54,13 +54,19 @@ public class GameControllerTest {
 
         session.subscribe(WEBSOCKET_TOPIC_SUBSCRIPTION, new MockStompFrameHandler());
 
-        session.send("/app/games/" + response.getBody().getUuid() + "/pieces", "{\"pebbleType\": \"BLACK\", \"column\": 0, \"row\": 0}".getBytes());
-        session.send("/app/games/" + response.getBody().getUuid() + "/pieces", "{\"pebbleType\": \"WHITE\", \"column\": 0, \"row\": 1}".getBytes());
+        String blackMovePayload = "{\"playerUuid\": \"" + response.getBody().getPlayers().get(0).getUuid().toString() + "\", \"column\": 0, \"row\": 0}";
+        // TODO: Expose join game endpoint to join WHITE player to game
+        //        String blackMovePayload = "{\"playerUuid\": \"" + response.getBody().getPlayers().get(0).getUuid().toString() + "\", \"column\": 0, \"row\": 0}";
+
+        session.send("/app/games/" + response.getBody().getUuid() + "/pieces", blackMovePayload.getBytes());
+        // TODO: Expose join game endpoint to join WHITE player to game
+        //        session.send("/app/games/" + response.getBody().getUuid() + "/pieces", "{\"pebbleType\": \"WHITE\", \"column\": 0, \"row\": 1}".getBytes());
 
         String message = blockingQueue.poll(1, SECONDS);
 
-        Assert.assertTrue(message.contains("{\"pebbleType\":\"WHITE\",\"column\":0,\"row\":1}"));
         Assert.assertTrue(message.contains("{\"pebbleType\":\"BLACK\",\"column\":0,\"row\":0}"));
+        // TODO: Expose join game endpoint to join WHITE player to game
+        //        Assert.assertTrue(message.contains("{\"pebbleType\":\"WHITE\",\"column\":0,\"row\":1}"));
     }
 
     class MockStompFrameHandler implements StompFrameHandler {

@@ -5,13 +5,17 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import xyz.jacobclark.exceptions.NotPlayersTurnException;
+import xyz.jacobclark.exceptions.PlayerNotFoundException;
 import xyz.jacobclark.exceptions.PositionOccupiedException;
 import xyz.jacobclark.exceptions.PositionOutOfBoundsException;
 import xyz.jacobclark.games.Game;
 import xyz.jacobclark.games.impl.Gomoku;
+import xyz.jacobclark.models.Move;
 import xyz.jacobclark.models.Piece;
+import xyz.jacobclark.models.Player;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -20,9 +24,26 @@ public class GameController {
 
     @MessageMapping("/games/{uuid}/pieces")
     @SendTo("/topic/games/pieces")
-    public List<Piece> placePiece(@DestinationVariable UUID uuid, Piece move) throws PositionOutOfBoundsException, PositionOccupiedException, NotPlayersTurnException {
-        games.get(uuid).getBoard().placePiece(move);
+    public List<Piece> placePiece(@DestinationVariable UUID uuid, Move move) throws PositionOutOfBoundsException, PositionOccupiedException, NotPlayersTurnException, PlayerNotFoundException {
+        games.get(uuid).getBoard().placePiece(getMovedPiece(uuid, move));
         return games.get(uuid).getBoard().getPieces();
+    }
+
+    private Piece getMovedPiece(@DestinationVariable UUID uuid, Move move) throws PlayerNotFoundException {
+        Optional<Player> currentPlayer = games
+                .get(uuid)
+                .getPlayers()
+                .stream()
+                .filter(getPlayerByUuid(move.getPlayerUuid()))
+                .findAny();
+
+        if (!currentPlayer.isPresent()) throw new PlayerNotFoundException();
+
+        return new Piece(currentPlayer.get().getPebbleType(), move.getColumn(), move.getRow());
+    }
+
+    private Predicate<Player> getPlayerByUuid(UUID playersUuid) {
+        return player -> player.getUuid().equals(playersUuid);
     }
 
     @PostMapping("/games")
