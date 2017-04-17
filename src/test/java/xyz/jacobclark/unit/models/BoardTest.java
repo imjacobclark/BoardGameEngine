@@ -33,11 +33,13 @@ public class BoardTest {
     }
 
     @Test
-    public void canPlaceAWhiteStoneAtGivenPositionOnBoard() throws PositionOccupiedException, PositionOutOfBoundsException, NotPlayersTurnException {
+    public void canPlaceAWhiteStoneAtGivenPositionOnBoard_WhenMoveIsValid() throws PositionOccupiedException, PositionOutOfBoundsException, NotPlayersTurnException {
         Board board = new Board(gomokuRules);
-        Piece expectedPiece = new Piece(WHITE, 0, 0);
+        board.placePiece(new Piece(BLACK, 0, 0));
 
-        assertThat(board.placePiece(new Piece(WHITE, 0, 0)), samePropertyValuesAs(expectedPiece));
+        Piece expectedPiece = new Piece(WHITE, 0, 1);
+
+        assertThat(board.placePiece(new Piece(WHITE, 0, 1)), samePropertyValuesAs(expectedPiece));
     }
 
     @Test
