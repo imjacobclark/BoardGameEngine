@@ -4,16 +4,14 @@ import org.junit.Test;
 import xyz.jacobclark.exceptions.NotPlayersTurnException;
 import xyz.jacobclark.exceptions.PositionOccupiedException;
 import xyz.jacobclark.exceptions.PositionOutOfBoundsException;
-import xyz.jacobclark.models.Piece;
 import xyz.jacobclark.models.PebbleType;
+import xyz.jacobclark.models.Piece;
 import xyz.jacobclark.rules.Rules;
 import xyz.jacobclark.rules.impl.GomokuRules;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class GomokuRulesTest {
@@ -57,10 +55,35 @@ public class GomokuRulesTest {
     @Test(expected = NotPlayersTurnException.class)
     public void canNotPlaceSameColouredStoneTwiceInARow() throws Exception, PositionOccupiedException, NotPlayersTurnException {
         ArrayList<Piece> pieces = new ArrayList<>();
-        pieces.add(new Piece(PebbleType.BLACK, 0,0 ));
-        pieces.add(new Piece(PebbleType.WHITE, 0,1 ));
-        pieces.add(new Piece(PebbleType.BLACK, 0,2 ));
+        pieces.add(new Piece(PebbleType.BLACK, 0, 0));
+        pieces.add(new Piece(PebbleType.WHITE, 0, 1));
+        pieces.add(new Piece(PebbleType.BLACK, 0, 2));
 
         gomokuRules.validateThatMoveIsLegal(pieces, new Piece(PebbleType.BLACK, 0, 3));
+    }
+
+    @Test(expected = NotPlayersTurnException.class)
+    public void canNotPlaceBlackStone_WhenBlackHasJustBeenPlaced() throws Exception, PositionOccupiedException, NotPlayersTurnException {
+        ArrayList<Piece> pieces = new ArrayList<>();
+        pieces.add(new Piece(PebbleType.BLACK, 0, 0));
+
+        gomokuRules.validateThatMoveIsLegal(pieces, new Piece(PebbleType.BLACK, 0, 1));
+    }
+
+    @Test(expected = NotPlayersTurnException.class)
+    public void canNotPlaceWhiteStone_WhenWhiteHasJustBeenPlaced_AfterSeveralMoves() throws Exception, PositionOccupiedException, NotPlayersTurnException {
+        ArrayList<Piece> pieces = new ArrayList<>();
+        pieces.add(new Piece(PebbleType.WHITE, 0, 0));
+        pieces.add(new Piece(PebbleType.BLACK, 0, 1));
+        pieces.add(new Piece(PebbleType.WHITE, 0, 2));
+
+        gomokuRules.validateThatMoveIsLegal(pieces, new Piece(PebbleType.WHITE, 0, 3));
+    }
+
+    @Test(expected = NotPlayersTurnException.class)
+    public void canNotPlaceAWhiteStoneFirst() throws Exception, PositionOccupiedException, NotPlayersTurnException {
+        ArrayList<Piece> pieces = new ArrayList<>();
+
+        gomokuRules.validateThatMoveIsLegal(pieces, new Piece(PebbleType.WHITE, 0, 0));
     }
 }

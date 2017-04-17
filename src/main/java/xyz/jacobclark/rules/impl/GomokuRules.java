@@ -3,6 +3,7 @@ package xyz.jacobclark.rules.impl;
 import xyz.jacobclark.exceptions.NotPlayersTurnException;
 import xyz.jacobclark.exceptions.PositionOutOfBoundsException;
 import xyz.jacobclark.exceptions.PositionOccupiedException;
+import xyz.jacobclark.models.PebbleType;
 import xyz.jacobclark.models.Piece;
 import xyz.jacobclark.rules.Rules;
 import xyz.jacobclark.validators.HorizontalValidator;
@@ -18,6 +19,9 @@ public class GomokuRules implements Rules {
     public boolean validateThatMoveIsLegal(List<Piece> pieces, Piece piece) throws PositionOccupiedException, PositionOutOfBoundsException, NotPlayersTurnException {
         if (pieces.stream().anyMatch(twoPiecesAtSameXYIntersectionOnBoard(piece)))
             throw new PositionOccupiedException();
+
+        if(pieces.size() == 0 && piece.getPebbleType() != PebbleType.BLACK)
+            throw new NotPlayersTurnException();
 
         if (pieces.size() > 0 && pieces.get(pieces.size() - 1).getPebbleType() == piece.getPebbleType())
             throw new NotPlayersTurnException();
