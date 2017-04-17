@@ -1,6 +1,7 @@
 package xyz.jacobclark.unit.rules;
 
 import org.junit.Test;
+import xyz.jacobclark.exceptions.GameWonException;
 import xyz.jacobclark.exceptions.NotPlayersTurnException;
 import xyz.jacobclark.exceptions.PositionOccupiedException;
 import xyz.jacobclark.exceptions.PositionOutOfBoundsException;
@@ -12,6 +13,7 @@ import xyz.jacobclark.rules.impl.GomokuRules;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class GomokuRulesTest {
@@ -85,5 +87,25 @@ public class GomokuRulesTest {
         ArrayList<Piece> pieces = new ArrayList<>();
 
         gomokuRules.validateThatMoveIsLegal(pieces, new Piece(PebbleType.WHITE, 0, 0));
+    }
+
+    @Test(expected = GameWonException.class)
+    public void throwsGameWonException_WhenGameIsWonHorizontally() throws Exception {
+        ArrayList<Piece> pieces = new ArrayList<>();
+        pieces.add(new Piece(PebbleType.WHITE, 0, 0));
+        pieces.add(new Piece(PebbleType.WHITE, 1, 0));
+        pieces.add(new Piece(PebbleType.WHITE, 2, 0));
+        pieces.add(new Piece(PebbleType.WHITE, 3, 0));
+        pieces.add(new Piece(PebbleType.WHITE, 4, 0));
+
+        gomokuRules.validateThatGameIsWin(pieces);
+    }
+
+    @Test
+    public void returnsFalse_WhenGameIsNotWonYet() throws Exception {
+        ArrayList<Piece> pieces = new ArrayList<>();
+        pieces.add(new Piece(PebbleType.WHITE, 0, 0));
+
+        assertFalse(gomokuRules.validateThatGameIsWin(pieces));
     }
 }

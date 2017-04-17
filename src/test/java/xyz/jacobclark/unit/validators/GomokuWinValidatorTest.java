@@ -3,8 +3,7 @@ package xyz.jacobclark.unit.validators;
 import org.junit.Test;
 import xyz.jacobclark.models.Piece;
 import xyz.jacobclark.models.PebbleType;
-import xyz.jacobclark.rules.Rules;
-import xyz.jacobclark.rules.impl.GomokuRules;
+import xyz.jacobclark.validators.GomokuWinValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +11,7 @@ import java.util.List;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
-public class HorizontalValidatorTest {
-    Rules gomokuRules = new GomokuRules();
-
+public class GomokuWinValidatorTest {
     @Test
     public void gameIsNotWon_WhenBlackHas4PiecesHorizontallyWithoutGap() throws Exception {
         List<Piece> pieces = new ArrayList<>();
@@ -23,7 +20,8 @@ public class HorizontalValidatorTest {
         pieces.add(new Piece(PebbleType.BLACK, 3, 0));
         pieces.add(new Piece(PebbleType.BLACK, 4, 0));
 
-        assertThat(gomokuRules.validateThatGameIsWin(pieces), is(false));
+        boolean result = new GomokuWinValidator().validate(pieces, 5);
+        assertThat(result, is(false));
     }
 
     @Test
@@ -37,13 +35,15 @@ public class HorizontalValidatorTest {
         pieces.add(new Piece(PebbleType.BLACK, 6, 0));
         pieces.add(new Piece(PebbleType.BLACK, 7, 0));
 
-        assertThat(gomokuRules.validateThatGameIsWin(pieces), is(false));
+        boolean result = new GomokuWinValidator().validate(pieces, 5);
+        assertThat(result, is(false));
     }
 
     @Test
     public void gameIsNotWon_WhenNoPiecesArePlaced() throws Exception {
         List<Piece> pieces = new ArrayList<>();
-        assertThat(gomokuRules.validateThatGameIsWin(pieces), is(false));
+        boolean result = new GomokuWinValidator().validate(pieces, 5);
+        assertThat(result, is(false));
     }
 
     @Test
@@ -51,7 +51,8 @@ public class HorizontalValidatorTest {
         List<Piece> pieces = new ArrayList<>();
         pieces.add(new Piece(PebbleType.BLACK, 0, 0));
 
-        assertThat(gomokuRules.validateThatGameIsWin(pieces), is(false));
+        boolean result = new GomokuWinValidator().validate(pieces, 5);
+        assertThat(result, is(false));
     }
 
     @Test
@@ -60,7 +61,8 @@ public class HorizontalValidatorTest {
         pieces.add(new Piece(PebbleType.BLACK, 0, 0));
         pieces.add(new Piece(PebbleType.WHITE, 0, 1));
 
-        assertThat(gomokuRules.validateThatGameIsWin(pieces), is(false));
+        boolean result = new GomokuWinValidator().validate(pieces, 5);
+        assertThat(result, is(false));
     }
 
     @Test
@@ -74,7 +76,8 @@ public class HorizontalValidatorTest {
         pieces.add(new Piece(PebbleType.BLACK, 7, 1));
 
 
-        assertThat(gomokuRules.validateThatGameIsWin(pieces), is(false));
+        boolean result = new GomokuWinValidator().validate(pieces, 5);
+        assertThat(result, is(false));
     }
 
     @Test
@@ -86,7 +89,8 @@ public class HorizontalValidatorTest {
         pieces.add(new Piece(PebbleType.BLACK, 4, 0));
         pieces.add(new Piece(PebbleType.BLACK, 5, 0));
 
-        assertThat(gomokuRules.validateThatGameIsWin(pieces), is(true));
+        boolean result = new GomokuWinValidator().validate(pieces, 5);
+        assertThat(result, is(true));
     }
 
     @Test
@@ -113,7 +117,8 @@ public class HorizontalValidatorTest {
         pieces.add(new Piece(PebbleType.BLACK, 11, 4));
         pieces.add(new Piece(PebbleType.BLACK, 12, 4));
 
-        assertThat(gomokuRules.validateThatGameIsWin(pieces), is(true));
+        boolean result = new GomokuWinValidator().validate(pieces, 5);
+        assertThat(result, is(true));
     }
 
     @Test
@@ -145,7 +150,8 @@ public class HorizontalValidatorTest {
         pieces.add(new Piece(PebbleType.BLACK, 13, 7));
         pieces.add(new Piece(PebbleType.BLACK, 14, 7));
 
-        assertThat(gomokuRules.validateThatGameIsWin(pieces), is(true));
+        boolean result = new GomokuWinValidator().validate(pieces, 5);
+        assertThat(result, is(true));
     }
 
     @Test
@@ -175,7 +181,8 @@ public class HorizontalValidatorTest {
         pieces.add(new Piece(PebbleType.BLACK, 14, 7));
         pieces.add(new Piece(PebbleType.BLACK, 15, 7));
 
-        assertThat(gomokuRules.validateThatGameIsWin(pieces), is(true));
+        boolean result = new GomokuWinValidator().validate(pieces, 5);
+        assertThat(result, is(true));
     }
 
     @Test
@@ -187,6 +194,25 @@ public class HorizontalValidatorTest {
         pieces.add(new Piece(PebbleType.WHITE, 11, 8));
         pieces.add(new Piece(PebbleType.WHITE, 12, 8));
 
-        assertThat(gomokuRules.validateThatGameIsWin(pieces), is(true));
+        boolean result = new GomokuWinValidator().validate(pieces, 5);
+        assertThat(result, is(true));
+    }
+
+    @Test
+    public void gameIsWon_WhenGameIsPlayed_BlackWhite_BlackWhite() throws Exception {
+        List<Piece> pieces = new ArrayList<>();
+        pieces.add(new Piece(PebbleType.BLACK, 8, 8));
+        pieces.add(new Piece(PebbleType.WHITE, 1, 8));
+        pieces.add(new Piece(PebbleType.BLACK, 9, 8));
+        pieces.add(new Piece(PebbleType.WHITE, 2, 8));
+        pieces.add(new Piece(PebbleType.BLACK, 10, 8));
+        pieces.add(new Piece(PebbleType.WHITE, 8, 8));
+        pieces.add(new Piece(PebbleType.BLACK, 11, 8));
+        pieces.add(new Piece(PebbleType.WHITE, 4, 8));
+        pieces.add(new Piece(PebbleType.BLACK, 12, 8));
+        pieces.add(new Piece(PebbleType.WHITE, 1, 8));
+
+        boolean result = new GomokuWinValidator().validate(pieces, 5);
+        assertThat(result, is(true));
     }
 }

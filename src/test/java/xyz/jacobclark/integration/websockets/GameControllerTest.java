@@ -72,6 +72,86 @@ public class GameControllerTest {
 
         Assert.assertTrue(message.contains("{\"pebbleType\":\"BLACK\",\"column\":0,\"row\":0}"));
         Assert.assertTrue(message.contains("{\"pebbleType\":\"WHITE\",\"column\":0,\"row\":1}"));
+        Assert.assertTrue(message.contains("\"title\":\"GOMOKU\""));
+        Assert.assertTrue(message.contains("\"board\":{\"pieces\":"));
+        Assert.assertTrue(message.contains("{\"players\":[{\""));
+    }
+
+    @Test
+    public void gameWin_PutsMessageOnWinningQueue_WithExpectedBody() throws Exception {
+        ResponseEntity<Gomoku> response = new RestTemplate().postForEntity("http://localhost:8080/games", null, Gomoku.class);
+        ResponseEntity<Player> joinGameResponse = new RestTemplate().postForEntity("http://localhost:8080/games/" + response.getBody().getUuid() + "/players", null, Player.class);
+
+        StompSession session = stompClient
+                .connect(WEBSOCKET_URI, new StompSessionHandlerAdapter() {
+                })
+                .get(1, SECONDS);
+
+        session.subscribe(WEBSOCKET_TOPIC_SUBSCRIPTION, new MockStompFrameHandler());
+        session.subscribe("/topic/games/events/win", new MockStompFrameHandler());
+
+        String blackMovePayload = "{\"playerUuid\": \"" + response.getBody().getPlayers().get(0).getUuid().toString() + "\", \"column\": 0, \"row\": 0}";
+        String blackMovePayload1 = "{\"playerUuid\": \"" + response.getBody().getPlayers().get(0).getUuid().toString() + "\", \"column\": 1, \"row\": 0}";
+        String blackMovePayload2 = "{\"playerUuid\": \"" + response.getBody().getPlayers().get(0).getUuid().toString() + "\", \"column\": 2, \"row\": 0}";
+        String blackMovePayload3 = "{\"playerUuid\": \"" + response.getBody().getPlayers().get(0).getUuid().toString() + "\", \"column\": 3, \"row\": 0}";
+        String blackMovePayload4 = "{\"playerUuid\": \"" + response.getBody().getPlayers().get(0).getUuid().toString() + "\", \"column\": 4, \"row\": 0}";
+
+        String whiteMovePayload = "{\"playerUuid\": \"" + joinGameResponse.getBody().getUuid() + "\", \"column\": 0, \"row\": 1}";
+        String whiteMovePayload1 = "{\"playerUuid\": \"" + joinGameResponse.getBody().getUuid() + "\", \"column\": 0, \"row\": 2}";
+        String whiteMovePayload2 = "{\"playerUuid\": \"" + joinGameResponse.getBody().getUuid() + "\", \"column\": 0, \"row\": 3}";
+        String whiteMovePayload3 = "{\"playerUuid\": \"" + joinGameResponse.getBody().getUuid() + "\", \"column\": 8, \"row\": 4}";
+        String whiteMovePayload4 = "{\"playerUuid\": \"" + joinGameResponse.getBody().getUuid() + "\", \"column\": 0, \"row\": 9}";
+
+        session.send("/app/games/" + response.getBody().getUuid() + "/pieces", blackMovePayload.getBytes());
+
+        Thread.sleep(100);
+
+        session.send("/app/games/" + response.getBody().getUuid() + "/pieces", whiteMovePayload.getBytes());
+
+        Thread.sleep(100);
+
+        session.send("/app/games/" + response.getBody().getUuid() + "/pieces", blackMovePayload1.getBytes());
+
+        Thread.sleep(100);
+
+        session.send("/app/games/" + response.getBody().getUuid() + "/pieces", whiteMovePayload1.getBytes());
+
+        Thread.sleep(100);
+
+        session.send("/app/games/" + response.getBody().getUuid() + "/pieces", blackMovePayload2.getBytes());
+
+        Thread.sleep(100);
+
+        session.send("/app/games/" + response.getBody().getUuid() + "/pieces", whiteMovePayload2.getBytes());
+
+        Thread.sleep(100);
+
+        session.send("/app/games/" + response.getBody().getUuid() + "/pieces", blackMovePayload3.getBytes());
+
+        Thread.sleep(100);
+
+        session.send("/app/games/" + response.getBody().getUuid() + "/pieces", whiteMovePayload3.getBytes());
+
+        Thread.sleep(100);
+
+        session.send("/app/games/" + response.getBody().getUuid() + "/pieces", blackMovePayload4.getBytes());
+
+        Thread.sleep(500);
+
+        blockingQueue.poll();
+        blockingQueue.poll();
+        blockingQueue.poll();
+        blockingQueue.poll();
+        blockingQueue.poll();
+        blockingQueue.poll();
+        blockingQueue.poll();
+        blockingQueue.poll();
+
+        String message = blockingQueue.poll();
+
+        Assert.assertTrue(message.contains("\"title\":\"GOMOKU\""));
+        Assert.assertTrue(message.contains("\"board\":{\"pieces\":"));
+        Assert.assertTrue(message.contains("{\"players\":[{\""));
     }
 
     class MockStompFrameHandler implements StompFrameHandler {

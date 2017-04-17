@@ -1,6 +1,7 @@
 package xyz.jacobclark.controllers;
 
 import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +22,15 @@ public class GameController {
 
     @MessageMapping("/games/{uuid}/pieces")
     @SendTo("/topic/games/pieces")
-    public List<Piece> placePiece(@DestinationVariable UUID uuid, Move move) throws PositionOutOfBoundsException, PositionOccupiedException, NotPlayersTurnException, PlayerNotFoundException {
+    public Game placePiece(@DestinationVariable UUID uuid, Move move) throws PositionOutOfBoundsException, PositionOccupiedException, NotPlayersTurnException, PlayerNotFoundException, GameWonException {
         games.get(uuid).getBoard().placePiece(new Piece(getPlayerToMove(uuid, move).getPebbleType(), move.getColumn(), move.getRow()));
-        return games.get(uuid).getBoard().getPieces();
+        return games.get(uuid);
+    }
+
+    @MessageExceptionHandler
+    @SendTo("/topic/games/events/win")
+    public Game handleGameWonException(@DestinationVariable UUID uuid, GameWonException gameWonException) throws PlayerNotFoundException, GameWonException, PositionOutOfBoundsException, PositionOccupiedException, NotPlayersTurnException {
+        return games.get(uuid);
     }
 
     private Player getPlayerToMove(UUID uuid, Move move) throws PlayerNotFoundException {

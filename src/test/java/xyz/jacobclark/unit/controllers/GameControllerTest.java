@@ -4,10 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import xyz.jacobclark.controllers.GameController;
-import xyz.jacobclark.exceptions.FullGameException;
-import xyz.jacobclark.exceptions.NotPlayersTurnException;
-import xyz.jacobclark.exceptions.PlayerNotFoundException;
-import xyz.jacobclark.exceptions.PositionOccupiedException;
+import xyz.jacobclark.exceptions.*;
 import xyz.jacobclark.games.Game;
 import xyz.jacobclark.models.Move;
 import xyz.jacobclark.models.PebbleType;
@@ -34,7 +31,7 @@ public class GameControllerTest {
 
         UUID firstPlayersUUID = game.getPlayers().get(0).getUuid();
 
-        List<Piece> pieces = gameController.placePiece(game.getUuid(), new Move(firstPlayersUUID, 0, 0));
+        List<Piece> pieces = gameController.placePiece(game.getUuid(), new Move(firstPlayersUUID, 0, 0)).getBoard().getPieces();
 
         List<Piece> expectedPieces = new ArrayList<>();
         expectedPieces.add(new Piece(PebbleType.BLACK, 0, 0));
@@ -49,7 +46,7 @@ public class GameControllerTest {
 
         UUID uuidThatDoesNotExists = UUID.randomUUID();
 
-        List<Piece> pieces = gameController.placePiece(game.getUuid(), new Move(uuidThatDoesNotExists, 0, 0));
+        List<Piece> pieces = gameController.placePiece(game.getUuid(), new Move(uuidThatDoesNotExists, 0, 0)).getBoard().getPieces();
 
         List<Piece> expectedPieces = new ArrayList<>();
         expectedPieces.add(new Piece(PebbleType.BLACK, 0, 0));
@@ -98,5 +95,15 @@ public class GameControllerTest {
 
         gameController.joinGame(game.getUuid());
         gameController.joinGame(game.getUuid());
+    }
+
+    @Test
+    public void gameWonExceptionHandler_ReturnsExpectedGame() throws Exception {
+        GameController gameController = new GameController();
+        Game game = gameController.createGame();
+
+        game.getBoard().placePiece(new Piece(PebbleType.BLACK, 0, 0));
+
+        assertThat(gameController.handleGameWonException(game.getUuid(), new GameWonException()), samePropertyValuesAs(game));
     }
 }

@@ -1,5 +1,6 @@
 package xyz.jacobclark.models;
 
+import xyz.jacobclark.exceptions.GameWonException;
 import xyz.jacobclark.exceptions.NotPlayersTurnException;
 import xyz.jacobclark.exceptions.PositionOccupiedException;
 import xyz.jacobclark.exceptions.PositionOutOfBoundsException;
@@ -21,10 +22,12 @@ public class Board {
         this.rules = rules;
     }
 
-    public Piece placePiece(Piece piece) throws PositionOccupiedException, PositionOutOfBoundsException, NotPlayersTurnException {
+    public Piece placePiece(Piece piece) throws PositionOccupiedException, PositionOutOfBoundsException, NotPlayersTurnException, GameWonException {
         rules.validateThatMoveIsLegal(pieces, piece);
 
         pieces.add(piece);
+
+        rules.validateThatGameIsWin(pieces);
 
         return piece;
     }

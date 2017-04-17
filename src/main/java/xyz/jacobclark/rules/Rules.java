@@ -1,5 +1,6 @@
 package xyz.jacobclark.rules;
 
+import xyz.jacobclark.exceptions.GameWonException;
 import xyz.jacobclark.exceptions.NotPlayersTurnException;
 import xyz.jacobclark.exceptions.PositionOutOfBoundsException;
 import xyz.jacobclark.exceptions.PositionOccupiedException;
@@ -9,5 +10,5 @@ import java.util.List;
 
 public interface Rules {
     boolean validateThatMoveIsLegal(List<Piece> pieces, Piece piece) throws PositionOccupiedException, PositionOutOfBoundsException, NotPlayersTurnException;
-    boolean validateThatGameIsWin(List<Piece> pieces);
+    boolean validateThatGameIsWin(List<Piece> pieces) throws GameWonException;
 }
