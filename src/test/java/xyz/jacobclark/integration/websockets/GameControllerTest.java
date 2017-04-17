@@ -17,6 +17,7 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 import xyz.jacobclark.games.impl.Gomoku;
+import xyz.jacobclark.models.Player;
 
 import java.lang.reflect.Type;
 import java.util.concurrent.BlockingQueue;
@@ -46,6 +47,7 @@ public class GameControllerTest {
     @Test
     public void successfulPlacePieceCallToWebsocketPiecesEndpointReturnsAllCurrentPiecesOnBoard() throws Exception {
         ResponseEntity<Gomoku> response = new RestTemplate().postForEntity("http://localhost:8080/games", null, Gomoku.class);
+        ResponseEntity<Player> joinGameResponse = new RestTemplate().postForEntity("http://localhost:8080/games/" + response.getBody().getUuid() + "/players", null, Player.class);
 
         StompSession session = stompClient
                 .connect(WEBSOCKET_URI, new StompSessionHandlerAdapter() {
@@ -55,18 +57,21 @@ public class GameControllerTest {
         session.subscribe(WEBSOCKET_TOPIC_SUBSCRIPTION, new MockStompFrameHandler());
 
         String blackMovePayload = "{\"playerUuid\": \"" + response.getBody().getPlayers().get(0).getUuid().toString() + "\", \"column\": 0, \"row\": 0}";
-        // TODO: Expose join game endpoint to join WHITE player to game
-        //        String blackMovePayload = "{\"playerUuid\": \"" + response.getBody().getPlayers().get(0).getUuid().toString() + "\", \"column\": 0, \"row\": 0}";
+        String whiteMovePayload = "{\"playerUuid\": \"" + joinGameResponse.getBody().getUuid() + "\", \"column\": 0, \"row\": 1}";
 
         session.send("/app/games/" + response.getBody().getUuid() + "/pieces", blackMovePayload.getBytes());
-        // TODO: Expose join game endpoint to join WHITE player to game
-        //        session.send("/app/games/" + response.getBody().getUuid() + "/pieces", "{\"pebbleType\": \"WHITE\", \"column\": 0, \"row\": 1}".getBytes());
 
-        String message = blockingQueue.poll(1, SECONDS);
+        Thread.sleep(100);
+
+        session.send("/app/games/" + response.getBody().getUuid() + "/pieces", whiteMovePayload.getBytes());
+
+        Thread.sleep(100);
+
+        blockingQueue.poll();
+        String message = blockingQueue.poll();
 
         Assert.assertTrue(message.contains("{\"pebbleType\":\"BLACK\",\"column\":0,\"row\":0}"));
-        // TODO: Expose join game endpoint to join WHITE player to game
-        //        Assert.assertTrue(message.contains("{\"pebbleType\":\"WHITE\",\"column\":0,\"row\":1}"));
+        Assert.assertTrue(message.contains("{\"pebbleType\":\"WHITE\",\"column\":0,\"row\":1}"));
     }
 
     class MockStompFrameHandler implements StompFrameHandler {
