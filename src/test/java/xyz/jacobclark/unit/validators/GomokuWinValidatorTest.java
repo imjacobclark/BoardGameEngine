@@ -1,15 +1,15 @@
 package xyz.jacobclark.unit.validators;
 
 import org.junit.Test;
-import xyz.jacobclark.models.Piece;
 import xyz.jacobclark.models.PebbleType;
+import xyz.jacobclark.models.Piece;
 import xyz.jacobclark.validators.GomokuWinValidator;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class GomokuWinValidatorTest {
     @Test
@@ -230,13 +230,38 @@ public class GomokuWinValidatorTest {
     }
 
     @Test
-    public void gameIsWon_WhenPiecesArePlacedInRandomOrderOnBoard() throws Exception {
+    public void gameIsWon_WhenPiecesArePlacedInRandomOrderOnBoard_AndPiecesExsistInSameColumnsButDifferentRows() throws Exception {
         List<Piece> pieces = new ArrayList<>();
-        pieces.add(new Piece(PebbleType.WHITE, 14, 8));
-        pieces.add(new Piece(PebbleType.WHITE, 15, 8));
-        pieces.add(new Piece(PebbleType.WHITE, 13, 8));
-        pieces.add(new Piece(PebbleType.WHITE, 11, 8));
-        pieces.add(new Piece(PebbleType.WHITE, 12, 8));
+        pieces.add(new Piece(PebbleType.BLACK, 6, 5));
+        pieces.add(new Piece(PebbleType.BLACK, 8, 5));
+        pieces.add(new Piece(PebbleType.BLACK, 10, 5));
+        pieces.add(new Piece(PebbleType.BLACK, 5, 5));
+        pieces.add(new Piece(PebbleType.BLACK, 3, 5));
+        pieces.add(new Piece(PebbleType.BLACK, 12, 5));
+        pieces.add(new Piece(PebbleType.BLACK, 1, 5));
+        pieces.add(new Piece(PebbleType.BLACK, 14, 5));
+
+        // Winning pieces
+        pieces.add(new Piece(PebbleType.BLACK, 7, 8));
+        pieces.add(new Piece(PebbleType.BLACK, 8, 8));
+        pieces.add(new Piece(PebbleType.BLACK, 9, 8));
+        pieces.add(new Piece(PebbleType.BLACK, 10, 8));
+        pieces.add(new Piece(PebbleType.BLACK, 11, 8));
+
+        pieces.add(new Piece(PebbleType.BLACK, 11, 7));
+
+        pieces.add(new Piece(PebbleType.WHITE, 7, 5));
+        pieces.add(new Piece(PebbleType.WHITE, 9, 5));
+        pieces.add(new Piece(PebbleType.WHITE, 11, 5));
+        pieces.add(new Piece(PebbleType.WHITE, 4, 5));
+        pieces.add(new Piece(PebbleType.WHITE, 2, 5));
+        pieces.add(new Piece(PebbleType.WHITE, 13, 5));
+        pieces.add(new Piece(PebbleType.WHITE, 0, 5));
+
+        pieces.add(new Piece(PebbleType.WHITE, 7, 7));
+        pieces.add(new Piece(PebbleType.WHITE, 8, 7));
+        pieces.add(new Piece(PebbleType.WHITE, 9, 7));
+        pieces.add(new Piece(PebbleType.WHITE, 10, 7));
 
         boolean result = new GomokuWinValidator().validate(pieces, 5);
         assertThat(result, is(true));
