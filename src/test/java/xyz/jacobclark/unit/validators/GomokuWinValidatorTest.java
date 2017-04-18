@@ -215,4 +215,30 @@ public class GomokuWinValidatorTest {
         boolean result = new GomokuWinValidator().validate(pieces, 5);
         assertThat(result, is(true));
     }
+
+    @Test
+    public void gameIsWon_WhenPiecesArePlacedRightToLeftOnBoard() throws Exception {
+        List<Piece> pieces = new ArrayList<>();
+        pieces.add(new Piece(PebbleType.WHITE, 15, 8));
+        pieces.add(new Piece(PebbleType.WHITE, 14, 8));
+        pieces.add(new Piece(PebbleType.WHITE, 13, 8));
+        pieces.add(new Piece(PebbleType.WHITE, 12, 8));
+        pieces.add(new Piece(PebbleType.WHITE, 11, 8));
+
+        boolean result = new GomokuWinValidator().validate(pieces, 5);
+        assertThat(result, is(true));
+    }
+
+    @Test
+    public void gameIsWon_WhenPiecesArePlacedInRandomOrderOnBoard() throws Exception {
+        List<Piece> pieces = new ArrayList<>();
+        pieces.add(new Piece(PebbleType.WHITE, 14, 8));
+        pieces.add(new Piece(PebbleType.WHITE, 15, 8));
+        pieces.add(new Piece(PebbleType.WHITE, 13, 8));
+        pieces.add(new Piece(PebbleType.WHITE, 11, 8));
+        pieces.add(new Piece(PebbleType.WHITE, 12, 8));
+
+        boolean result = new GomokuWinValidator().validate(pieces, 5);
+        assertThat(result, is(true));
+    }
 }

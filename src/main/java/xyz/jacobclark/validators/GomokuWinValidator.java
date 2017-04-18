@@ -3,6 +3,7 @@ package xyz.jacobclark.validators;
 import xyz.jacobclark.models.PebbleType;
 import xyz.jacobclark.models.Piece;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,8 @@ public class GomokuWinValidator {
         boolean initialRun = true;
         int consecutivePiecesInColumn = 0;
         int lastCheckedColumn = 0;
+
+        pieces.sort(Comparator.comparing(Piece::getColumn));
 
         for (Piece piece : pieces) {
             if (initialRun) {
