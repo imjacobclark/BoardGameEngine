@@ -13,38 +13,77 @@ public class GomokuWinValidator {
         List<Piece> whitePieces = pieces.stream().filter(piece -> piece.getPebbleType() == PebbleType.WHITE).collect(toList());
         List<Piece> blackPieces = pieces.stream().filter(piece -> piece.getPebbleType() == PebbleType.BLACK).collect(toList());
 
-        return doesHaveNConsecutivePiecesInColumn(validConsecutiveNumber, whitePieces) ||
+        return doesHaveNConsecutivePiecesInRow(validConsecutiveNumber, whitePieces) ||
+                doesHaveNConsecutivePiecesInRow(validConsecutiveNumber, blackPieces) ||
+                doesHaveNConsecutivePiecesInColumn(validConsecutiveNumber, whitePieces) ||
                 doesHaveNConsecutivePiecesInColumn(validConsecutiveNumber, blackPieces);
     }
 
-    private boolean doesHaveNConsecutivePiecesInColumn(int validConsecutiveNumber, List<Piece> pieces) {
+    public boolean doesHaveNConsecutivePiecesInColumn(int validConsecutiveNumber, List<Piece> pieces){
+        boolean initialRun = true;
+        int consecutivePiecesInColumn = 0;
+        int lastCheckedRow = 0;
+
+        for (Integer row = 0; row <= 15; row++) {
+            Integer columnToFilterOn = row;
+            List<Piece> piecesInColumn = pieces.stream().filter(piece -> piece.getColumn() == columnToFilterOn).collect(toList());
+
+            if (piecesInColumn.size() == 0) continue;
+
+            piecesInColumn.sort(Comparator.comparing(Piece::getColumn));
+
+            for (Integer piece = 0; piece <= piecesInColumn.size() - 1; piece++) {
+                if (initialRun) {
+                    initialRun = false;
+                    lastCheckedRow = piecesInColumn.get(piece).getRow();
+                    consecutivePiecesInColumn++;
+                    continue;
+                }
+
+                if (lastCheckedRow + 1 == piecesInColumn.get(piece).getRow()) {
+                    consecutivePiecesInColumn++;
+                } else {
+                    consecutivePiecesInColumn = 1;
+                }
+
+                lastCheckedRow = piecesInColumn.get(piece).getColumn();
+            }
+        }
+
+        if (consecutivePiecesInColumn >= validConsecutiveNumber)
+            return true;
+
+        return false;
+    }
+
+    private boolean doesHaveNConsecutivePiecesInRow(int validConsecutiveNumber, List<Piece> pieces) {
         boolean initialRun = true;
         int consecutivePiecesInColumn = 0;
         int lastCheckedColumn = 0;
 
         for (Integer row = 0; row <= 15; row++) {
             Integer rowToFilterOn = row;
-            List<Piece> rows = pieces.stream().filter(piece -> piece.getRow() == rowToFilterOn).collect(toList());
+            List<Piece> piecesInRow = pieces.stream().filter(piece -> piece.getRow() == rowToFilterOn).collect(toList());
 
-            if (rows.size() == 0) continue;
+            if (piecesInRow.size() == 0) continue;
 
-            rows.sort(Comparator.comparing(Piece::getColumn));
+            piecesInRow.sort(Comparator.comparing(Piece::getColumn));
 
-            for (Integer column = 0; column <= rows.size() - 1; column++) {
+            for (Integer piece = 0; piece <= piecesInRow.size() - 1; piece++) {
                 if (initialRun) {
                     initialRun = false;
-                    lastCheckedColumn = rows.get(column).getColumn();
+                    lastCheckedColumn = piecesInRow.get(piece).getColumn();
                     consecutivePiecesInColumn++;
                     continue;
                 }
 
-                if (lastCheckedColumn + 1 == rows.get(column).getColumn()) {
+                if (lastCheckedColumn + 1 == piecesInRow.get(piece).getColumn()) {
                     consecutivePiecesInColumn++;
                 } else {
                     consecutivePiecesInColumn = 1;
                 }
 
-                lastCheckedColumn = rows.get(column).getColumn();
+                lastCheckedColumn = piecesInRow.get(piece).getColumn();
             }
         }
 
